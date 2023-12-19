@@ -1,0 +1,50 @@
+.breadcrumb-banner{
+    background-image: url('../../assets/images/subTopic-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 15rem;
+    height: 15rem;
+    position: relative;
+    z-index: 1;
+}
+
+.breadcrumb-banner::after{
+    content: '';
+    position: absolute;
+    top:0;
+    left : 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: rgb(66 3 3 / 60%);
+}
+
+.breadcrumb-banner .breadcrumb-item a{
+    font-size: 1rem;
+    color: white;
+    overflow-wrap: break-word
+
+}
+
+.breadcrumb-banner h2{
+    color: #fff;
+    display: block;
+    overflow-wrap: break-word
+
+
+}
+
+.breadcrumb-banner .breadcrumb-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-wrap: break-word
+
+}
+
+.breadcrumb-banner .breadcrumb-item+.breadcrumb-item::before {
+    content: "\f101";
+    font-family: "FontAwesome"; 
+    color: white;
+    padding: 0 0.5rem; 
+}

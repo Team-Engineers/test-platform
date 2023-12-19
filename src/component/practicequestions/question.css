@@ -1,0 +1,255 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner:wght@400;500&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,700;1,100;1,200;1,300;1,400;1,700&display=swap'); */
+
+.question-practice .question-container {
+  margin: 10px;
+  background-color: white;
+  border-radius: 15px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.question-practice .question-box {
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: bolder;
+  border: 1px solid #bababa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  margin-bottom: 20px;
+  /* background-color: white; */
+  padding: 2rem 2rem 0 2rem;
+  /* min-height: 74vh;
+  max-height: 74vh; */
+}
+
+.question-practice .question-number {
+}
+
+.question-practice .question-text {
+  text-align: justify;
+  font-weight: 600;
+  overflow: hidden;
+  word-wrap: break-word;
+  line-height: 1.5rem;
+}
+
+.question-practice .options-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.question-practice .options-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.question-practice .option-box {
+  border: solid 1px #bababa;
+  color: #444;
+  padding: 10px;
+  margin: 10px 0px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: lighter;
+  transition: background-color 0.3s;
+}
+
+.question-practice .options-grid .incorrect {
+  color: white;
+  background: red;
+}
+
+.question-practice .options-grid .correct {
+  /* border: 2px solid green !important; */
+  color: black;
+}
+
+/* .question-practice .correct .option-alphabet {
+    background-color: green;
+    color: white;
+} */
+
+.question-practice .incorrect .option-alphabet {
+  /* background-color: white; */
+  color: white;
+}
+
+.question-practice .option-alphabet {
+  font-weight: bold;
+  color: #444;
+  margin-right: 15px;
+  border: 1px solid #bababa;
+  border-radius: 100%;
+  height: 25px;
+  width: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.question-practice .correct-answer {
+  margin-left: auto;
+}
+
+.question-practice .incorrect-answer {
+  margin-left: auto;
+}
+
+@media screen and (max-width: 1024px) {
+  .question-practice .question-box {
+    width: 100%;
+    margin: 10px 0;
+  }
+  .question-practice .option-box {
+    margin: 10px 0;
+  }
+  .question-practice .options-container {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.question-practice .question-image {
+  width: 55%;
+  object-fit: cover;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.question-practice .p {
+  justify-content: baseline;
+  align-items: baseline;
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0px;
+}
+
+.question-practice .pagination {
+  /* Styles for pagination */
+  display: flex;
+  justify-content: center;
+  color: black;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.question-practice .page-button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border: 2px solid #79090b;
+  background-color: #ffffff;
+  color: #333;
+  border-radius: 10px;
+  transition: background-color 0.2s ease;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* gap: 0.5rem; */
+  margin: 5px;
+}
+
+.question-practice .page-button.active {
+  background-color: #79090b;
+  color: #fff;
+  font-weight: bold;
+}
+
+.question-practice .page-button.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  background-color: #c9c4c4;
+}
+
+.question-practice .explanation-wrapper .explanation p h6 {
+  color: #444;
+  line-height: 2rem;
+}
+
+.question-practice .explanation-wrapper .explanation {
+  border: 1px solid #bababa;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff7f7;
+}
+
+.question-practice .question {
+  min-width: 64%;
+  max-width: 64%;
+  padding: 0 5px 0 0;
+  margin-right: 2%;
+  border-right: 1px solid #abc;
+  max-height: 64vh;
+  overflow: auto;
+}
+
+.question-practice .item-content {
+  max-height: 64vh;
+  overflow: auto;
+  padding: 0 5px;
+}
+
+.question-practice .question-text-container {
+  text-align: justify;
+}
+
+@media screen and (max-width: 700px) {
+  .question-practice .page-button {
+    padding: 0.5rem;
+    justify-content: center;
+  }
+}
+
+.question-practice h6 {
+  margin-bottom: 0px;
+  line-height: 1.5rem;
+}
+
+.question-practice .question-container .paragraph {
+  padding: 2rem;
+}
+
+.question-practice .question-box .question-option {
+  /* padding: 2rem 2rem 0 2rem; */
+  display: flex;
+}
+
+.toggle-button {
+  transition: background-color 0.3s ease;
+  /* Add other styles for your button */
+}
+
+.toggle-button.toggled {
+  background-color: #79090b;
+  /* Change the background color when toggled */
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  /* Adjust the duration and easing as needed */
+}
+
+.content.visible {
+  max-height: 1000px;
+  /* Adjust the max height as needed */
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+}
+
+@media screen and (max-width: 800px) {
+  .question-practice .question-box .question-option {
+    padding: 2rem 1rem 0 1rem;
+  }
+}
