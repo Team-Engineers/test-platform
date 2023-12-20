@@ -18,17 +18,14 @@
   font-size: 1rem;
 }
 
-.question-practice{
-  margin: 10px;  
+.question-practice {
+  margin: 10px;
   font-size: 14px;
   color: #333;
   display: flex;
   border: 4px solid #4a7a9d;
   height: 96.5vh;
-
 }
-
-
 
 .question-practice .question-text {
   text-align: justify;
@@ -55,7 +52,7 @@
   max-height: 74vh;
 }
 
-.question-practice .test-title{
+.question-practice .test-title {
   text-align: center;
   font-size: 22px;
   font-weight: 600;
@@ -64,7 +61,7 @@
 .question-practice .option-box {
   display: flex;
   align-items: center;
-  gap : 0.3rem;
+  gap: 0.3rem;
   margin-top: 0.7rem;
 }
 
@@ -232,14 +229,13 @@
   display: flex;
 }
 
-
-.question-practice .question-box .para-type .item-passage{
+.question-practice .question-box .para-type .item-passage {
   width: 60%;
   min-height: 64vh;
   max-height: 64vh;
   overflow: auto;
 }
-.question-practice .question-box .para-type .item-content{
+.question-practice .question-box .para-type .item-content {
   width: 40%;
 }
 .toggle-button {
@@ -274,13 +270,12 @@
   }
 }
 
-
 .question-practice-v2 .LeftBlock {
   /* width: 18%; */
   z-index: 2;
   position: absolute;
   top: -2.7rem;
-  left: 0px
+  left: 0px;
 }
 
 .question-practice-v2 .toggle-side-bar-btn {
@@ -328,9 +323,8 @@
   text-align: center;
 }
 
-
-
-.question-practice-v2 .lg-answered span, .question-practice-v2 .lg-not_answered span {
+.question-practice-v2 .lg-answered span,
+.question-practice-v2 .lg-not_answered span {
   float: left;
   height: 26px;
   margin-right: 10px;
@@ -338,18 +332,16 @@
   color: #fff;
 }
 .question-practice-v2 .legend-item span {
-  background: url(https://kananprep-assets.s3.ap-south-1.amazonaws.com/testengine/testengine-items/catlayout/questions-sprite.png) no-repeat;
+  background: url(../../assets/images/questions-sprite.png) no-repeat;
   color: #262626;
   line-height: 15px;
   text-align: center;
-  font-family: Arial,Helvetica,sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 1em;
 }
 
-
-
-
-.question-practice-v2 .lg-review_answered span, .question-practice-v2 .lg-review span {
+.question-practice-v2 .lg-review_answered span,
+.question-practice-v2 .lg-review span {
   float: left;
   height: 28px;
   margin-right: 10px;
@@ -357,15 +349,13 @@
   padding-top: 5px;
 }
 
-
-
 .question-practice-v2 .legend-item.lg-review_answered {
   margin-bottom: 6px;
   width: 100%;
 }
 
-
-.question-practice-v2 .lg-review_answered span, .question-practice-v2 .lg-review span {
+.question-practice-v2 .lg-review_answered span,
+.question-practice-v2 .lg-review span {
   float: left;
   height: 28px;
   margin-right: 10px;
@@ -391,9 +381,9 @@
 .question-practice-v2 .pallet-list-body {
   overflow-y: auto;
   min-height: calc(100vh - 476px);
-  min-height: calc(var(--vh, 1vh)*100 - 476px);
+  min-height: calc(var(--vh, 1vh) * 100 - 476px);
   max-height: calc(100vh - 476px);
-  max-height: calc(var(--vh, 1vh)*100 - 476px);
+  max-height: calc(var(--vh, 1vh) * 100 - 476px);
   padding: 0 3px;
 }
 
@@ -401,9 +391,8 @@
   display: inline-block;
 }
 
-
 .question-practice-v2 .pallet-item span {
-  background: url(https://kananprep-assets.s3.ap-south-1.amazonaws.com/testengine/testengine-items/catlayout/questions-sprite.png) no-repeat;
+  background: url(../../assets/images/questions-sprite.png) no-repeat;
   color: #fff;
   cursor: pointer;
   float: left;
@@ -412,7 +401,7 @@
   height: 43px;
   line-height: 42px;
   margin-bottom: 10px;
-  margin-right: 2px;
+  margin-right: 6px;
   text-align: center;
   width: 50px;
 }
@@ -434,7 +423,6 @@
   line-height: 50px;
   margin-bottom: 3px;
 }
-
 
 .question-practice-v2 span.review_answered {
   background-position: -203px -49px;
@@ -480,7 +468,7 @@
   color: white;
 }
 
-.question-practice-v2 .lg-not_answered span{
+.question-practice-v2 .lg-not_answered span {
   background-position: -42px -55px;
   line-height: 20px;
   padding-top: 3px;

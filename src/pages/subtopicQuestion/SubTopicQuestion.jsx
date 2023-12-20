@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 import Nopage from "../nopage/Nopage";
 import PracticeQuestions from "../../component/practicequestions/PracticeQuestions";
+import Instruction from "../../component/instruction/Instruction";
 
 const SubTopicQuestion = () => {
   const { topic } = useParams();
@@ -22,7 +23,8 @@ const SubTopicQuestion = () => {
 
   return (
     <div>
-      <PracticeQuestions />
+      {/* <PracticeQuestions /> */}
+      <Instruction/>
     </div>
   );
 };
