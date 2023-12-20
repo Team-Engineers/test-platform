@@ -14,6 +14,7 @@ import ScrollToTop from "./component/scrolltotop/ScrollToTop";
 import Admin from "./pages/admin/Admin";
 import QuestionPush from "./component/questionPush/QuestionPush";
 import QuestionUpdate from "./component/questionUpdate/QuestionUpdate";
+import Instruction from "./component/instruction/Instruction";
 const App = () => {
   const isUserSignedIn = () => {
     const tokenData = JSON.parse(localStorage.getItem("accessToken"));
@@ -36,6 +37,7 @@ const App = () => {
             <Route exact path="/:topic" element={<SubTopicsList />} />
             <Route exact path="/user" element={<UserProfile />} />
             <Route exact path="/quiz/:topic" element={<Quiz />} />
+            <Route exact path="/quiz/instruction" element={<Instruction />} />
             {isUserAdmin() ? (
               <>
               <Route exact path="/admin" element={<Admin />} />

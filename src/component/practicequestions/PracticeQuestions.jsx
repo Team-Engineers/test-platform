@@ -76,6 +76,11 @@ const PracticeQuestions = () => {
         <div className="container-fluid">
           <div className="row d-flex justify-content-between">
             <div className="col-lg-10">
+              <div className="text-center test-title">
+                TESTKNOCK TEST PLATFORM
+              </div>
+            </div>
+            <div className="col-lg-10">
               <RecommendedSubTopics />
             </div>
             <div className="col-lg-12">

@@ -4,21 +4,17 @@ import styled from "styled-components";
 import { subtopicsData } from "../../utils/constants";
 const TopicCard = styled.li`
   height: fit-content;
-  background-color: rgba(121, 9, 11, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #79090b;
   text-align: center;
-  background: ${(props) => (props.isCurrentTopic ? "#79090b" : "inherit")};
+  background: ${(props) => (props.isCurrentTopic ? "#2f72b7" : "#e4edf7")};
   color: ${(props) => (props.isCurrentTopic ? "white" : "black")};
+
   &:hover {
-    background: #79090b;
-    color: white;
-  }
-  &:hover a {
-    color: white;
-  }
+    background: #2f72b7;
+    color : white;
+    }
   &:focus {
     outline: none;
   }
@@ -32,11 +28,10 @@ const Wrapper = styled.ul`
   gap: 1rem;
   padding: 0px;
   flex-wrap: wrap;
-  display : flex;
+  display: flex;
 `;
 
 const MarginTop = styled.div`
-  margin-top: 1.5rem;
   display: flex;
   justify-content: center;
   algin-items: center;
@@ -44,6 +39,12 @@ const MarginTop = styled.div`
   top: 0;
   position: sticky;
   overflow: hidden;
+  display: block;
+  overflow: auto;
+  white-space: nowrap;
+  border: 1px solid #b1b1b1;
+  padding: 10px;
+  margin-bottom: 6px;
 `;
 
 const Box = styled.div`
@@ -53,7 +54,7 @@ const Box = styled.div`
 `;
 const Box2 = styled.h6`
   white-space: nowrap;
-  padding: 10px 5px;
+  padding: 4px 8px;
   margin-bottom: 0px;
   text-transform: uppercase;
   font-weight: ${(props) => (props.isCurrentTopic ? "bolder" : "normal")};
