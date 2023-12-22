@@ -17,6 +17,8 @@ const QuestionV2 = ({ data }) => {
     }
   }, [location.pathname, isMounted]);
 
+  const paraQuestions = data[0]?.paragraph ? data[0]?.questions?.length : 0;
+
   useEffect(() => {
     setIsMounted(true);
     const storedPage = localStorage.getItem("currentPage");
@@ -71,6 +73,8 @@ const QuestionV2 = ({ data }) => {
     return pages;
   };
 
+  console.log("paraquestions", paraQuestions);
+
   return (
     <section className="question-practice-v2">
       <div className="w-100 d-flex justify-content-center align-items-center flex-column">
@@ -78,12 +82,14 @@ const QuestionV2 = ({ data }) => {
           data.paragraph ? (
             data
           ) : (
-            <div className="row">
+            <div className="row w-100">
               <div className="col-md-10">
                 <div className="question-box paragraph">
                   <div className="question-number-container">
                     <span
-                      className={`question-number id-${data[currentPage]._id}`}
+                      className={`question-number id-${
+                        data[Math.floor(currentPage / paraQuestions)]._id
+                      }`}
                     >
                       Question No. {`${currentPage + 1} `}
                     </span>
@@ -91,27 +97,29 @@ const QuestionV2 = ({ data }) => {
 
                   <div className="question-option para-type">
                     <div className="question item-passage">
-                      <h6 className="mb-2 ">
+                      <h6 className="mb-3 ">
                         <strong>Direction:</strong> Read the following passage
                         carefully and answer the questions that follow.
                       </h6>
                       <div className="d-flex justify-content-start align-items-center gap-3">
                         <div className="question-text ">
-                          {data[currentPage].paragraph.map(
-                            (paragraph, paraindex) => (
-                              <MathText
-                                className="mb-2"
-                                key={paraindex}
-                                text={paragraph}
-                                textTag="h6"
-                              />
-                            )
-                          )}
+                          {data[
+                            Math.floor(currentPage / paraQuestions)
+                          ].paragraph.map((paragraph, paraindex) => (
+                            <MathText
+                              className="mb-2"
+                              key={paraindex}
+                              text={paragraph}
+                              textTag="h6"
+                            />
+                          ))}
                         </div>
                       </div>
-                      <div className="d-flex justify-content-center align-items-center gap-3">
-                        {data[currentPage].images &&
-                          data[currentPage].images.map((image, imageIndex) => (
+                      <div className="d-flex justify-content-center align-items-center gap-3 mt-3">
+                        {data[Math.floor(currentPage / paraQuestions)].images &&
+                          data[
+                            Math.floor(currentPage / paraQuestions)
+                          ].images.map((image, imageIndex) => (
                             <img
                               className="question-image"
                               key={imageIndex}
@@ -128,8 +136,10 @@ const QuestionV2 = ({ data }) => {
                             <div className="question-option">
                               <div className="d-flex justify-content-start align-items-center gap-3 mb-3">
                                 <div>
-                                  {data[currentPage].questions[
-                                    currentPage
+                                  {data[
+                                    Math.floor(currentPage / paraQuestions)
+                                  ].questions[
+                                    currentPage % paraQuestions
                                   ].text.map((text, textIndex) => (
                                     <MathText
                                       className="question-text mb-2"
@@ -141,10 +151,13 @@ const QuestionV2 = ({ data }) => {
                                 </div>
                               </div>
                               <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
-                                {data[currentPage].questions[currentPage]
+                                {data[Math.floor(currentPage / paraQuestions)]
+                                  .questions[currentPage % paraQuestions]
                                   .images &&
-                                  data[currentPage].questions[
-                                    currentPage
+                                  data[
+                                    Math.floor(currentPage / paraQuestions)
+                                  ].questions[
+                                    currentPage % paraQuestions
                                   ].images.map((image, imageIndex) => (
                                     <img
                                       className="question-image"
@@ -154,8 +167,10 @@ const QuestionV2 = ({ data }) => {
                                     />
                                   ))}
                               </div>
-                              {data[currentPage].questions[
-                                currentPage
+                              {data[
+                                Math.floor(currentPage / paraQuestions)
+                              ].questions[
+                                currentPage % paraQuestions
                               ].options.map((option, optionIndex) => (
                                 <div key={optionIndex} className={`option-box`}>
                                   <div class="optionitem">
@@ -187,9 +202,22 @@ const QuestionV2 = ({ data }) => {
                       </div>
                     </div>
                   </div>
+                  <div className="button-container">
+                    <div className="d-flex justify-content-between align-items-center mx-2">
+                      <div className="d-flex align-center gap-3 p-2">
+                        <button className="test-button">
+                          Mark for review & next
+                        </button>
+                        <button className="test-button">Clear Response</button>
+                      </div>
+                      <button className="next-button test-button">
+                        Save & Next
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="col-md-2 position-relative">
+              <div className="col-md-2 ">
                 <div class="LeftBlock ">
                   <button class="toggle-side-bar-btn" type="button">
                     &gt;
@@ -242,7 +270,7 @@ const QuestionV2 = ({ data }) => {
           )
         ) : (
           <div className="options-container">
-            <div className="row">
+            <div className="row w-100">
               <div className="col-md-10">
                 {data
                   .slice(currentPage * 1, (currentPage + 1) * 1)
@@ -270,7 +298,7 @@ const QuestionV2 = ({ data }) => {
                               ))}
                             </div>
                           </div>
-                          <div className="d-flex justify-content-center align-items-center gap-3 mb-3">
+                          <div className="d-flex justify-content-center align-items-center gap-3 mt-3 mb-3">
                             {question.images &&
                               question.images.map((image, imageIndex) => (
                                 <img
@@ -313,11 +341,26 @@ const QuestionV2 = ({ data }) => {
                             </div>
                           ))}
                         </div>
+                        <div className="button-container">
+                          <div className="d-flex justify-content-between align-items-center mx-2">
+                            <div className="d-flex align-center gap-3 p-2">
+                              <button className="test-button">
+                                Mark for review & next
+                              </button>
+                              <button className="test-button">
+                                Clear Response
+                              </button>
+                            </div>
+                            <button className="next-button test-button">
+                              Save & Next
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
               </div>
-              <div className="col-md-2 position-relative">
+              <div className="col-md-2 ">
                 <div class="LeftBlock ">
                   <button class="toggle-side-bar-btn" type="button">
                     &gt;

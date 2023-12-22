@@ -29,22 +29,21 @@ const Wrapper = styled.ul`
   padding: 0px;
   flex-wrap: wrap;
   display: flex;
+  justify-content : start;
+  align-items : center;
+  margin-bottom : 0px;
 `;
 
 const MarginTop = styled.div`
-  display: flex;
-  justify-content: center;
-  algin-items: center;
-  flex-direction: column;
   top: 0;
   position: sticky;
-  overflow: hidden;
   display: block;
   overflow: auto;
   white-space: nowrap;
   border: 1px solid #b1b1b1;
   padding: 10px;
   margin-bottom: 6px;
+  height: 7vh;
 `;
 
 const Box = styled.div`

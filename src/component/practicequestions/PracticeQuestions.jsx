@@ -80,13 +80,13 @@ const PracticeQuestions = () => {
     <section className="question-practice">
       {data.length > 0 ? (
         <div className="container-fluid">
-          <div className="row d-flex justify-content-between">
+          <div className="row">
             <div className="col-lg-10">
-              <div className="text-center test-title">
+              <div className="text-center test-title" style = {{paddingRight:"1.8rem"}}>
                 TESTKNOCK TEST PLATFORM
               </div>
             </div>
-            <div className="col-lg-10">
+            <div className="col-lg-10" style = {{paddingRight:"1.8rem"}}> 
               <RecommendedSubTopics />
             </div>
             <div className="col-lg-12">
