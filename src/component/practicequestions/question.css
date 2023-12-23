@@ -257,6 +257,7 @@
   max-height: 68vh;
   overflow: auto;
   padding-right: 12px;
+  border-right: 1px solid #bababa;
 }
 .question-practice .question-box .para-type .item-content {
   min-width: 40%;

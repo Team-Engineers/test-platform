@@ -4,14 +4,54 @@ import { MathText } from "../mathJax/MathText";
 import { useLocation, useParams } from "react-router-dom";
 
 const QuestionV2 = ({ data }) => {
+  const generatePageNumbers2 = () => {
+    const totalPages = Math.ceil(data.length);
+    const pages = [];
+    let numberOfQuestions = 0;
+    for (let i = 0; i < totalPages; i++) {
+      const questionSet = data[i];
+      numberOfQuestions += questionSet.questions.length;
+      //  console.log("this para has, this number of quesitos",i,questionSet.questions.length)
+    }
+    for (let i = 0; i < numberOfQuestions; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
   const [selectedOption, setSelectedOption] = useState([]);
-  const [questionStatus, setQuestionStatus] = useState("not_visited");
+  const [selectedOptionsPara, setSelectedOptionsPara] = useState(
+    Array(data?.length)
+      .fill()
+      .map((_, dataIndex) =>
+        Array(data[dataIndex].questions.length).fill(undefined)
+      )
+  );
+
+  const [optionsUIPara, setOptionsUIPara] = useState(
+    Array(data?.length)
+      .fill()
+      .map((_, dataIndex) =>
+        Array(data[dataIndex].questions.length).fill(undefined)
+      )
+  );
+  // const [questionStatus, setQuestionStatus] = useState(
+  //   Array(data?.length)
+  //     .fill()
+  //     .map((_, dataIndex) =>
+  //       Array(data[dataIndex].questions.length).fill("not_visited")
+  //     )
+  // );
+  const [questionStatus, setQuestionStatus] = useState(
+    Array(generatePageNumbers2).fill("not_visited")
+  );
+
   const [currentPage, setCurrentPage] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
   const location = useLocation();
   const { topic } = useParams();
   useEffect(() => {
-    setQuestionStatus("not_visited");
     if (isMounted) {
       localStorage.removeItem("currentPage");
     }
@@ -39,12 +79,68 @@ const QuestionV2 = ({ data }) => {
     setSelectedOption(updatedSelectedOption);
   };
 
+  const handleOptionSelectPara = (itemIndex, questionIndex, optionIndex) => {
+    const updatedSelectedOptionsPara = [...selectedOptionsPara];
+    updatedSelectedOptionsPara[itemIndex] = [...selectedOptionsPara[itemIndex]];
+    updatedSelectedOptionsPara[itemIndex][questionIndex] = optionIndex;
+    setSelectedOptionsPara(updatedSelectedOptionsPara);
+
+    const updatedOptionsUIPara = [...optionsUIPara];
+    updatedOptionsUIPara[itemIndex] = [...optionsUIPara[itemIndex]];
+    updatedOptionsUIPara[itemIndex][questionIndex] = optionIndex;
+
+    setOptionsUIPara(updatedOptionsUIPara);
+  };
+  const handleClearResponsePara = () => {
+    const itemIndex = Math.floor(currentPage / paraQuestions);
+    const questionIndex = currentPage % paraQuestions;
+
+    const updatedSelectedOptionsPara = [...selectedOptionsPara];
+    updatedSelectedOptionsPara[itemIndex] = [...selectedOptionsPara[itemIndex]];
+    // console.log(
+    //   "what im trying to chnage",
+    //   updatedSelectedOptionsPara[itemIndex][questionIndex]
+    // );
+    updatedSelectedOptionsPara[itemIndex][questionIndex] = undefined;
+    setSelectedOptionsPara(updatedSelectedOptionsPara);
+
+    const updatedOptionsUIPara = [...optionsUIPara];
+    updatedOptionsUIPara[itemIndex] = [...optionsUIPara[itemIndex]];
+    updatedOptionsUIPara[itemIndex][questionIndex] = undefined;
+
+    setOptionsUIPara(updatedOptionsUIPara);
+  };
+
+  // useEffect(() => {
+  //   console.log("seleected option oara is changed", selectedOptionsPara);
+  // }, [selectedOptionsPara]);
+
+  // const handleClearResponse = () => {
+  //   const currentQuestionIndex = currentPage % paraQuestions;
+  //   const updatedSelectedOption = [...selectedOption];
+  //   updatedSelectedOption[currentQuestionIndex] = undefined;
+  //   setSelectedOption(updatedSelectedOption);
+  // };
+
   const handlePageChange = (pageIndex) => {
     setSelectedOption([]);
     setCurrentPage(pageIndex);
     window.scrollTo(0, 0);
     localStorage.setItem("currentPage", pageIndex);
+    const updatedStatusArray = [...questionStatus];
+    updatedStatusArray[pageIndex] = "not_answered";
+    setQuestionStatus(updatedStatusArray);
   };
+
+  // const handleSaveNextPara = () => {
+  //   const itemIndex = Math.floor(currentPage / paraQuestions);
+  //   const questionIndex = currentPage % paraQuestions;
+  //   let updatedQuestionStatus = [...questionStatus];
+  //   updatedQuestionStatus[itemIndex] = questionStatus[itemIndex];
+  //   updatedQuestionStatus[itemIndex][questionIndex] = "answered";
+
+  //   setQuestionStatus(updatedQuestionStatus);
+  // };
 
   const generatePageNumbers = () => {
     const totalPages = Math.ceil(data.length);
@@ -57,23 +153,11 @@ const QuestionV2 = ({ data }) => {
     return pages;
   };
 
-  const generatePageNumbers2 = () => {
-    const totalPages = Math.ceil(data.length);
-    const pages = [];
-    let numberOfQuestions = 0;
-    for (let i = 0; i < totalPages; i++) {
-      const questionSet = data[i];
-      numberOfQuestions += questionSet.questions.length;
-      //  console.log("this para has, this number of quesitos",i,questionSet.questions.length)
-    }
-    for (let i = 0; i < numberOfQuestions; i++) {
-      pages.push(i);
-    }
+  // useEffect(()=>{
+  //   console.log("response cleared ?",isResponseCleared)
+  // },[isResponseCleared])
 
-    return pages;
-  };
-
-  console.log("paraquestions", paraQuestions);
+  // console.log("paraquestions", paraQuestions);
 
   return (
     <section className="question-practice-v2">
@@ -172,15 +256,38 @@ const QuestionV2 = ({ data }) => {
                               ].questions[
                                 currentPage % paraQuestions
                               ].options.map((option, optionIndex) => (
-                                <div key={optionIndex} className={`option-box`}>
+                                <div
+                                  key={optionIndex}
+                                  onClick={() =>
+                                    handleOptionSelectPara(
+                                      Math.floor(currentPage / paraQuestions),
+                                      currentPage % paraQuestions,
+                                      optionIndex
+                                    )
+                                  }
+                                  className={`option-box`}
+                                >
                                   <div class="optionitem">
                                     <input
                                       type="radio"
-                                      name={option}
+                                      name={`question-${Math.floor(
+                                        currentPage / paraQuestions
+                                      )}`}
                                       id={optionIndex}
+                                      checked={
+                                        optionsUIPara[
+                                          Math.floor(
+                                            currentPage / paraQuestions
+                                          )
+                                        ][currentPage % paraQuestions] ===
+                                        optionIndex
+                                      }
                                     />
                                   </div>
-                                  <label for={optionIndex} class="optionLabel">
+                                  <label
+                                    for={optionIndex}
+                                    className="optionLabel"
+                                  >
                                     <div className="d-flex justify-content-start gap-3 w-100 align-items-center">
                                       <h6>{option.text}</h6>
                                       {option.image ? (
@@ -208,9 +315,21 @@ const QuestionV2 = ({ data }) => {
                         <button className="test-button">
                           Mark for review & next
                         </button>
-                        <button className="test-button">Clear Response</button>
+                        {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                          currentPage % paraQuestions
+                        ] !== undefined ? (
+                          <button
+                            className="test-button"
+                            onClick={handleClearResponsePara}
+                          >
+                            Clear Response
+                          </button>
+                        ) : null}
                       </div>
-                      <button className="next-button test-button">
+                      <button
+                        className="next-button test-button"
+                        // onClick={handleSaveNextPara}
+                      >
                         Save & Next
                       </button>
                     </div>
@@ -253,7 +372,7 @@ const QuestionV2 = ({ data }) => {
                           <span
                             id={pageIndex}
                             key={pageIndex}
-                            className={` ${questionStatus} ${
+                            className={` ${questionStatus[currentPage]} ${
                               currentPage === pageIndex ? "active" : ""
                             }`}
                             onClick={() => handlePageChange(pageIndex)}
