@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./question.css";
 import { MathText } from "../mathJax/MathText";
 import { useLocation, useParams } from "react-router-dom";
 
 const QuestionV2 = ({ data }) => {
+  let totalPages = 0;
+
   const generatePageNumbers2 = () => {
-    const totalPages = Math.ceil(data.length);
+    const totalLength = Math.ceil(data.length);
     const pages = [];
     let numberOfQuestions = 0;
-    for (let i = 0; i < totalPages; i++) {
+    for (let i = 0; i < totalLength; i++) {
       const questionSet = data[i];
       numberOfQuestions += questionSet.questions.length;
       //  console.log("this para has, this number of quesitos",i,questionSet.questions.length)
@@ -16,6 +18,8 @@ const QuestionV2 = ({ data }) => {
     for (let i = 0; i < numberOfQuestions; i++) {
       pages.push(i);
     }
+
+    totalPages = numberOfQuestions;
 
     return pages;
   };
@@ -25,7 +29,7 @@ const QuestionV2 = ({ data }) => {
     Array(data?.length)
       .fill()
       .map((_, dataIndex) =>
-        Array(data[dataIndex].questions.length).fill(undefined)
+        Array(data[dataIndex].questions?.length).fill(undefined)
       )
   );
 
@@ -36,16 +40,21 @@ const QuestionV2 = ({ data }) => {
         Array(data[dataIndex].questions.length).fill(undefined)
       )
   );
-  // const [questionStatus, setQuestionStatus] = useState(
-  //   Array(data?.length)
-  //     .fill()
-  //     .map((_, dataIndex) =>
-  //       Array(data[dataIndex].questions.length).fill("not_visited")
-  //     )
-  // );
   const [questionStatus, setQuestionStatus] = useState(
-    Array(generatePageNumbers2).fill("not_visited")
+    Array(data?.length)
+      .fill()
+      .map((_, dataIndex) =>
+        Array(data[dataIndex].questions.length).fill("not_visited")
+      )
   );
+
+  const [counts, setCounts] = useState({
+    not_visited: 0,
+    review_answered: 0,
+    review: 0,
+    answered: 0,
+    not_answered: 0,
+  });
 
   const [currentPage, setCurrentPage] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -88,9 +97,18 @@ const QuestionV2 = ({ data }) => {
     const updatedOptionsUIPara = [...optionsUIPara];
     updatedOptionsUIPara[itemIndex] = [...optionsUIPara[itemIndex]];
     updatedOptionsUIPara[itemIndex][questionIndex] = optionIndex;
-
     setOptionsUIPara(updatedOptionsUIPara);
+
+    const currentStatus = questionStatus[itemIndex][questionIndex];
+    // console.log("what is current status", currentStatus);
+    if (currentStatus === "not_visited") {
+      const updatedStatusArray = [...questionStatus];
+      updatedStatusArray[itemIndex] = [...questionStatus[itemIndex]];
+      updatedStatusArray[itemIndex][questionIndex] = "not_answered";
+      setQuestionStatus(updatedStatusArray);
+    }
   };
+
   const handleClearResponsePara = () => {
     const itemIndex = Math.floor(currentPage / paraQuestions);
     const questionIndex = currentPage % paraQuestions;
@@ -109,6 +127,11 @@ const QuestionV2 = ({ data }) => {
     updatedOptionsUIPara[itemIndex][questionIndex] = undefined;
 
     setOptionsUIPara(updatedOptionsUIPara);
+
+    const updatedStatusArray = [...questionStatus];
+    updatedStatusArray[itemIndex] = [...questionStatus[itemIndex]];
+    updatedStatusArray[itemIndex][questionIndex] = "not_answered";
+    setQuestionStatus(updatedStatusArray);
   };
 
   // useEffect(() => {
@@ -122,15 +145,7 @@ const QuestionV2 = ({ data }) => {
   //   setSelectedOption(updatedSelectedOption);
   // };
 
-  const handlePageChange = (pageIndex) => {
-    setSelectedOption([]);
-    setCurrentPage(pageIndex);
-    window.scrollTo(0, 0);
-    localStorage.setItem("currentPage", pageIndex);
-    const updatedStatusArray = [...questionStatus];
-    updatedStatusArray[pageIndex] = "not_answered";
-    setQuestionStatus(updatedStatusArray);
-  };
+  // console.log("status array what is happeingin with it outside", questionStatus);
 
   // const handleSaveNextPara = () => {
   //   const itemIndex = Math.floor(currentPage / paraQuestions);
@@ -153,11 +168,114 @@ const QuestionV2 = ({ data }) => {
     return pages;
   };
 
-  // useEffect(()=>{
-  //   console.log("response cleared ?",isResponseCleared)
-  // },[isResponseCleared])
+  const handleReviewNext = () => {
+    const itemIndex = Math.floor(currentPage / paraQuestions);
+    const questionIndex = currentPage % paraQuestions;
+    // console.log("what is current status", currentStatus);
+
+    const updatedStatusArray = [...questionStatus];
+    updatedStatusArray[itemIndex] = [...questionStatus[itemIndex]];
+
+    if (optionsUIPara[itemIndex][questionIndex] !== undefined) {
+      updatedStatusArray[itemIndex][questionIndex] = "review_answered";
+    } else {
+      updatedStatusArray[itemIndex][questionIndex] = "review";
+    }
+    setQuestionStatus(updatedStatusArray);
+    const pageIndex = currentPage + 1;
+    setSelectedOption([]);
+    setCurrentPage(pageIndex % totalPages);
+    window.scrollTo(0, 0);
+    localStorage.setItem("currentPage", pageIndex);
+
+    // console.log(
+    //   "status array what is happeingin with it inside function",
+    //   questionStatus
+    // );
+  };
+
+  const handleSaveNext = () => {
+    const itemIndex = Math.floor(currentPage / paraQuestions);
+    const questionIndex = currentPage % paraQuestions;
+    // console.log("what is current status", currentStatus);
+
+    const updatedStatusArray = [...questionStatus];
+    updatedStatusArray[itemIndex] = [...questionStatus[itemIndex]];
+    updatedStatusArray[itemIndex][questionIndex] = "answered";
+    setQuestionStatus(updatedStatusArray);
+    const pageIndex = currentPage + 1;
+    setSelectedOption([]);
+    setCurrentPage(pageIndex % totalPages);
+    window.scrollTo(0, 0);
+    localStorage.setItem("currentPage", pageIndex);
+    // console.log(
+    //   "status array what is happeingin with it inside function",
+    //   questionStatus
+    // );
+  };
+
+  const handlePageChange = (pageIndex) => {
+    const itemIndex = Math.floor(pageIndex / paraQuestions);
+    const questionIndex = pageIndex % paraQuestions;
+    setSelectedOption([]);
+    setCurrentPage(pageIndex % totalPages);
+    window.scrollTo(0, 0);
+    localStorage.setItem("currentPage", pageIndex);
+    const currentStatus = questionStatus[itemIndex][questionIndex];
+    // console.log("what is current status", currentStatus);
+    if (currentStatus === "not_visited") {
+      const updatedStatusArray = [...questionStatus];
+      updatedStatusArray[itemIndex] = [...questionStatus[itemIndex]];
+      updatedStatusArray[itemIndex][questionIndex] = "not_answered";
+      setQuestionStatus(updatedStatusArray);
+    }
+    // console.log(
+    //   "status array what is happeingin with it inside function",
+    //   questionStatus
+    // );
+  };
 
   // console.log("paraquestions", paraQuestions);
+
+  const countStatusOccurrences = useCallback(() => {
+    const new_count = {
+      not_visited: 0,
+      review_answered: 0,
+      review: 0,
+      answered: 0,
+      not_answered: 0,
+    };
+    for (let i = 0; i < questionStatus.length; i++) {
+      for (let j = 0; j < questionStatus[i].length; j++) {
+        const status = questionStatus[i][j];
+
+        switch (status) {
+          case "not_visited":
+            new_count.not_visited++;
+            break;
+          case "review_answered":
+            new_count.review_answered++;
+            break;
+          case "review":
+            new_count.review++;
+            break;
+          case "answered":
+            new_count.answered++;
+            break;
+          case "not_answered":
+            new_count.not_answered++;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    return new_count;
+  }, [questionStatus]);
+  useEffect(() => {
+    const updatedCounts = countStatusOccurrences();
+    setCounts(updatedCounts);
+  }, [currentPage, countStatusOccurrences]);
 
   return (
     <section className="question-practice-v2">
@@ -312,7 +430,10 @@ const QuestionV2 = ({ data }) => {
                   <div className="button-container">
                     <div className="d-flex justify-content-between align-items-center mx-2">
                       <div className="d-flex align-center gap-3 p-2">
-                        <button className="test-button">
+                        <button
+                          className="test-button"
+                          onClick={handleReviewNext}
+                        >
                           Mark for review & next
                         </button>
                         {optionsUIPara[Math.floor(currentPage / paraQuestions)][
@@ -326,12 +447,16 @@ const QuestionV2 = ({ data }) => {
                           </button>
                         ) : null}
                       </div>
-                      <button
-                        className="next-button test-button"
-                        // onClick={handleSaveNextPara}
-                      >
-                        Save & Next
-                      </button>
+                      {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                        currentPage % paraQuestions
+                      ] !== undefined ? (
+                        <button
+                          className="next-button test-button"
+                          onClick={handleSaveNext}
+                        >
+                          Save & Next
+                        </button>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -345,20 +470,20 @@ const QuestionV2 = ({ data }) => {
                     <div class="Legend">
                       <div class="legend-block">
                         <div class="legend-item lg-answered">
-                          <span>0</span> Answered
+                          <span>{counts.answered}</span> Answered
                         </div>
                         <div class="legend-item lg-not_answered">
-                          <span>1</span> Not Answered
+                          <span>{counts.not_answered}</span> Not Answered
                         </div>
                         <div class="legend-item lg-not_visited">
-                          <span>23</span> Not Visited
+                          <span>{counts.not_visited}</span> Not Visited
                         </div>
                         <div class="legend-item lg-review">
-                          <span>0</span> Marked for Review
+                          <span>{counts.review}</span> Marked for Review
                         </div>
                         <div class="legend-item lg-review_answered">
-                          <span>0</span> Answered &amp; Marked for Review (will
-                          be considered for evaluation)
+                          <span>{counts.review_answered}</span> Answered &amp;
+                          Marked for Review (will be considered for evaluation)
                         </div>
                       </div>
                     </div>
@@ -372,8 +497,10 @@ const QuestionV2 = ({ data }) => {
                           <span
                             id={pageIndex}
                             key={pageIndex}
-                            className={` ${questionStatus[currentPage]} ${
-                              currentPage === pageIndex ? "active" : ""
+                            className={` ${
+                              questionStatus[
+                                Math.floor(pageIndex / paraQuestions)
+                              ][pageIndex % paraQuestions]
                             }`}
                             onClick={() => handlePageChange(pageIndex)}
                           >
@@ -515,9 +642,7 @@ const QuestionV2 = ({ data }) => {
                           <span
                             id={pageIndex}
                             key={pageIndex}
-                            className={` ${questionStatus} ${
-                              currentPage === pageIndex ? "active" : ""
-                            }`}
+                            className={` ${questionStatus}`}
                             onClick={() => handlePageChange(pageIndex)}
                           >
                             {pageIndex + 1}
