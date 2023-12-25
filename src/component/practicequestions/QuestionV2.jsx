@@ -335,7 +335,7 @@ const QuestionV2 = ({ data }) => {
         setQuestionStatus(updatedStatusArray);
       }
     }
-  }, [currentPage, countStatusOccurrences]);
+  }, [currentPage, countStatusOccurrences, data?.paragraph, paraQuestions, questionStatus, questionStatusPara]);
 
   return (
     <section className="question-practice-v2">
