@@ -309,7 +309,7 @@ const QuestionV2 = ({ data }) => {
       }
     }
     return new_count;
-  }, [questionStatusPara, questionStatus]);
+  }, [questionStatusPara, questionStatus, data?.paragraph]);
 
   useEffect(() => {
     if (data?.paragraph) {
