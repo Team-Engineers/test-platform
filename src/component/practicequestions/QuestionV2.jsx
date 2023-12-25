@@ -318,7 +318,7 @@ const QuestionV2 = ({ data }) => {
       const updatedCounts = countStatusOccurrences();
       setCounts(updatedCounts);
       const currentStatus = questionStatusPara[itemIndex][questionIndex];
-      if (currentStatus === "not_visited" && currentPage !== 0) {
+      if (currentStatus === "not_visited") {
         const updatedStatusArray = [...questionStatusPara];
         updatedStatusArray[itemIndex] = [...questionStatusPara[itemIndex]];
         updatedStatusArray[itemIndex][questionIndex] = "not_answered";
@@ -329,7 +329,7 @@ const QuestionV2 = ({ data }) => {
       const updatedCounts = countStatusOccurrences();
       setCounts(updatedCounts);
       const currentStatus = questionStatus[questionIndex];
-      if (currentStatus === "not_visited" && currentPage !== 0) {
+      if (currentStatus === "not_visited") {
         const updatedStatusArray = [...questionStatus];
         updatedStatusArray[questionIndex] = "not_answered";
         setQuestionStatus(updatedStatusArray);
