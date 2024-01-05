@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "./QuestionPush.css";
+import axios from "axios";
+import { API } from "../../utils/constants";
 
 const initialItemOption = {
   ItemOptionID: "",
@@ -81,13 +83,50 @@ const QuestionForm = () => {
   const handleNestedInputChange = (field, index, nestedField, value) => {
     setFormData((prevData) => {
       const newData = { ...prevData };
-      newData[field][0][nestedField][index][nestedField] = value;
+      newData[field][index][nestedField] = value;
       return newData;
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleNestedLevel2InputChange = (field, index, nestedField1,index1,nestedField2, value) => {
+    setFormData((prevData) => {
+      const newData = { ...prevData };
+      newData[field][index][nestedField1][index1][nestedField2] = value;
+      return newData;
+    });
+  };
+
+  const handleNestedLevel3InputChange = (field, index, nestedField1,index1,nestedField2,index2,nestedField3, value) => {
+    setFormData((prevData) => {
+      const newData = { ...prevData };
+      newData[field][index][nestedField1][index1][nestedField2][index2][nestedField3] = value;
+      return newData;
+    });
+  };
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      console.error('Access token not found in local storage');
+      return;
+    }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    };
+
+    try {
+      // Make a POST request using Axios
+      const response = await axios.post(`${API}/test/question`, formData, config);
+  
+      // Handle the response as needed
+      console.log('Response:', response.data);
+    } catch (error) {
+      // Handle errors
+      console.error('Error submitting form:', error);
+    }
     // Your form submission logic here
     console.log("Form Data:", formData);
   };
@@ -333,7 +372,7 @@ const QuestionForm = () => {
               name="SubjectName"
               value={formData.SectionResponse[0].ItemResponse[0].SubjectName}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -353,7 +392,7 @@ const QuestionForm = () => {
               name="ItemID"
               value={formData.SectionResponse[0].ItemResponse[0].ItemID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -373,7 +412,7 @@ const QuestionForm = () => {
               name="ItemType"
               value={formData.SectionResponse[0].ItemResponse[0].ItemType}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -394,7 +433,7 @@ const QuestionForm = () => {
               name="SubjectID"
               value={formData.SectionResponse[0].ItemResponse[0].SubjectID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -415,7 +454,7 @@ const QuestionForm = () => {
               name="AreaName"
               value={formData.SectionResponse[0].ItemResponse[0].AreaName}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -436,7 +475,7 @@ const QuestionForm = () => {
               name="AreaID"
               value={formData.SectionResponse[0].ItemResponse[0].AreaID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -457,7 +496,7 @@ const QuestionForm = () => {
               name="TopicName"
               value={formData.SectionResponse[0].ItemResponse[0].TopicName}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -478,7 +517,7 @@ const QuestionForm = () => {
               name="TopicID"
               value={formData.SectionResponse[0].ItemResponse[0].TopicID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -499,7 +538,7 @@ const QuestionForm = () => {
               name="SubTopicName"
               value={formData.SectionResponse[0].ItemResponse[0].SubTopicName}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -520,7 +559,7 @@ const QuestionForm = () => {
               name="SubTopicID"
               value={formData.SectionResponse[0].ItemResponse[0].SubTopicID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -541,7 +580,7 @@ const QuestionForm = () => {
               name="StarRating"
               value={formData.SectionResponse[0].ItemResponse[0].StarRating}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -562,7 +601,7 @@ const QuestionForm = () => {
               name="ItemBankName"
               value={formData.SectionResponse[0].ItemResponse[0].ItemBankName}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -583,7 +622,7 @@ const QuestionForm = () => {
               name="Direction"
               value={formData.SectionResponse[0].ItemResponse[0].Direction}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -604,7 +643,7 @@ const QuestionForm = () => {
               name="IsApproved"
               value={formData.SectionResponse[0].ItemResponse[0].IsApproved}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -625,7 +664,7 @@ const QuestionForm = () => {
               name="Items"
               value={formData.SectionResponse[0].ItemResponse[0].Items}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -646,7 +685,7 @@ const QuestionForm = () => {
               name="ItemPassageID"
               value={formData.SectionResponse[0].ItemResponse[0].ItemPassageID}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -669,7 +708,7 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].PassageItemIndex
               }
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -690,7 +729,7 @@ const QuestionForm = () => {
               name="Passage"
               value={formData.SectionResponse[0].ItemResponse[0].Passage}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -711,7 +750,7 @@ const QuestionForm = () => {
               name="PassageTitle"
               value={formData.SectionResponse[0].ItemResponse[0].PassageTitle}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -734,7 +773,7 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].IsLinkedQuestion
               }
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -755,7 +794,7 @@ const QuestionForm = () => {
               name="Points"
               value={formData.SectionResponse[0].ItemResponse[0].Points}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -776,7 +815,7 @@ const QuestionForm = () => {
               name="NegativePoints"
               value={formData.SectionResponse[0].ItemResponse[0].NegativePoints}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -797,7 +836,7 @@ const QuestionForm = () => {
               name="SkippedPoints"
               value={formData.SectionResponse[0].ItemResponse[0].SkippedPoints}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -818,7 +857,7 @@ const QuestionForm = () => {
               name="Explanation"
               value={formData.SectionResponse[0].ItemResponse[0].Explanation}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -838,7 +877,7 @@ const QuestionForm = () => {
               name="Difficulty"
               value={formData.SectionResponse[0].ItemResponse[0].Difficulty}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -860,7 +899,7 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].DifficultyLevel
               }
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -880,7 +919,7 @@ const QuestionForm = () => {
               name="IsProofRead"
               value={formData.SectionResponse[0].ItemResponse[0].IsProofRead}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -900,7 +939,7 @@ const QuestionForm = () => {
               name="CorrectIndex"
               value={formData.SectionResponse[0].ItemResponse[0].CorrectIndex}
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -922,7 +961,7 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].IsRequiredQuestion
               }
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -947,7 +986,7 @@ const QuestionForm = () => {
                   .IsPassageQuestionSplit
               }
               onChange={(e) =>
-                handleNestedInputChange(
+                handleNestedLevel2InputChange(
                   "SectionResponse",
                   0,
                   "ItemResponse",
@@ -972,7 +1011,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .ItemOptionID
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "ItemOptionID",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -985,7 +1035,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .ItemID
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "ItemID",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -998,7 +1059,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .Options
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "Options",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1011,7 +1083,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .RHSOption
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "RHSOption",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1024,7 +1107,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .MarkedIndex
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "MarkedIndex",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1037,7 +1131,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .OrderNumber
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "OrderNumber",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1050,7 +1155,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .OptionIndex
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "OptionIndex",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1063,7 +1179,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .IsCorrect
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "IsCorrect",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1076,7 +1203,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .IsHTML
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "IsHTML",
+                  e.target.value
+                )
+              }
             />
           </div>
           <div className="col-md-3">
@@ -1089,7 +1227,18 @@ const QuestionForm = () => {
                 formData.SectionResponse[0].ItemResponse[0].ItemOptions[0]
                   .RHSIsHTML
               }
-              onChange={handleInputChange}
+              onChange={(e) =>
+                handleNestedLevel3InputChange(
+                  "SectionResponse",
+                  0,
+                  "ItemResponse",
+                  0,
+                  "ItemOptions",
+                  0,
+                  "RHSIsHTML",
+                  e.target.value
+                )
+              }
             />
           </div>
         </div>
