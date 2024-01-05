@@ -18,6 +18,22 @@ const QuestionPush = () => {
   const [diTopic, setDiTopic] = useState("pie_chart");
   // const [file, setFile] = useState("");
   const [entranceExams, setEntranceExams] = useState("Gate");
+  const [testID, setTestID] = useState("");
+  const [testName, setTestName] = useState("");
+  const [testDescription, setTestDescription] = useState("");
+  const [testLangauges, setTestLanguages] = useState("");
+  const [testInstruction, setTestInstruction] = useState("");
+  const [isSectionalTimer, setIsSectionalTimer] = useState("true");
+  // const [sectionResponse, setSectionResponse] = useState([]);
+  const [QuestionPaperSectionID, setQuestionPaperSectionID] = useState("");
+  const [QuestionPaperID, setQuestionPaperID] = useState("");
+  const [SectionTitle, setSectionTitle] = useState("");
+  const [OrderNumber, setOrderNumber] = useState("");
+  const [TotalMarks, setTotalMarks] = useState("");
+  const [TotalQuestions, setTotalQuestions] = useState("");
+  const [NegativeMarks, setNegativeMarks] = useState("");
+  const [TotalTime, setTotalTime] = useState("");
+  
 
   const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -218,9 +234,8 @@ const QuestionPush = () => {
 
     let questions = [];
 
-    const totalQuestions = document.querySelectorAll(
-      ".question-container"
-    ).length;
+    const totalQuestions = document.querySelectorAll(".question-container")
+      .length;
 
     for (
       let questionIndex = 1;
@@ -323,6 +338,148 @@ const QuestionPush = () => {
       <div className="container">
         <div className="row">
           <div className="col-md-12">
+            <div className="row">
+              <h2>Test Details:</h2>
+              <div className="col-md-3">
+                <label htmlFor="test-id">Test ID</label>
+                <input
+                  id="test-id"
+                  type="number"
+                  value={testID}
+                  onChange={(e) => setTestID(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="test-name">Test Name</label>
+                <input
+                  id="test-name"
+                  type="text"
+                  value={testName}
+                  onChange={(e) => setTestName(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="test-desc">Test Description</label>
+                <input
+                  id="test-desc"
+                  type="text"
+                  value={testDescription}
+                  onChange={(e) => setTestDescription(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="test-languages">Test languages</label>
+                <input
+                  id="test-languages"
+                  type="text"
+                  value={testLangauges}
+                  onChange={(e) => setTestLanguages(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-6">
+                <label htmlFor="test-instruction">Test Instruction</label>
+                <input
+                  id="test-instruction"
+                  type="text"
+                  value={testInstruction}
+                  onChange={(e) => setTestInstruction(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="sectionalTimer">Sectional Timer</label>
+                <input
+                  id="sectionalTimer"
+                  type="text"
+                  value={isSectionalTimer}
+                  onChange={(e) => setIsSectionalTimer(e.target.value)}
+                ></input>
+              </div>
+            </div>
+            <div className="row">
+              <h2>Section Details:</h2>
+              <div className="col-md-3">
+                <label htmlFor="QuestionPaperSectionID">
+                  Question Paper Section ID
+                </label>
+                <input
+                  id="QuestionPaperSectionID"
+                  type="number"
+                  value={QuestionPaperSectionID}
+                  onChange={(e) => setQuestionPaperSectionID(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="QuestionPaperID">Question Paper ID</label>
+                <input
+                  id="QuestionPaperID"
+                  type="number"
+                  value={QuestionPaperID}
+                  onChange={(e) => setQuestionPaperID(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="SectionTitle">Section Title</label>
+                <input
+                  id="SectionTitle"
+                  type="text"
+                  value={SectionTitle}
+                  onChange={(e) => setSectionTitle(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="OrderNumber">Order Number </label>
+                <input
+                  id="OrderNumber"
+                  type="number"
+                  value={OrderNumber}
+                  onChange={(e) => setOrderNumber(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="TotalMarks">Total Marks</label>
+                <input
+                  id="TotalMarks"
+                  type="number"
+                  value={TotalMarks}
+                  onChange={(e) => setTotalMarks(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="TotalQuestions">Total Questions</label>
+                <input
+                  id="TotalQuestions"
+                  type="number"
+                  value={TotalQuestions}
+                  onChange={(e) => setTotalQuestions(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="NegativeMarks">Negative Marks</label>
+                <input
+                  id="NegativeMarks"
+                  type="number"
+                  value={NegativeMarks}
+                  onChange={(e) => setNegativeMarks(e.target.value)}
+                ></input>
+              </div>
+              <div className="col-md-3">
+                <label htmlFor="TotalTime">Total Time(in second)</label>
+                <input
+                  id="TotalTime"
+                  type="number"
+                  value={TotalTime}
+                  onChange={(e) => setTotalTime(e.target.value)}
+                ></input>
+              </div>
+            </div>
+            <div className="row">
+              <h2>Section Item</h2>
+              <div className="col-md-3">
+
+              </div>
+            </div>
+          </div>
+          <div className="col-md-12">
             <h2> Subject </h2>
             <div className="form-section">
               <label htmlFor="subject">Select Subject:</label>
@@ -353,10 +510,7 @@ const QuestionPush = () => {
             </div>
 
             <h1>Create a New Question</h1>
-            <form
-              id="question-form"
-               onSubmit={handleSubmit}
-            >
+            <form id="question-form" onSubmit={handleSubmit}>
               <div className="form-section hidden-for-v1">
                 <label for="paragraph">Paragraph Text:</label>
                 <textarea
@@ -572,7 +726,7 @@ const QuestionPush = () => {
                 >
                   Add Question
                 </button>
-                <button type="button" onClick={()=>resetForm()}>
+                <button type="button" onClick={() => resetForm()}>
                   Reset
                 </button>
               </div>
