@@ -1,5 +1,19 @@
 /* Add your CSS styling here */
 
+.question-form{
+  margin: 20px;
+}
+
+.question-form label{
+  display: block;
+}
+
+.question-push{
+  border: 1px solid #bababa;
+  margin:20px;
+  padding: 20px;
+}
+
 .question-push h1 {
   color: #333;
   /* text-align: center; */
