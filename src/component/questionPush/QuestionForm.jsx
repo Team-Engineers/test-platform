@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./QuestionPush.css";
 import axios from "axios";
-import { API } from "../../utils/constants";
+// import { API } from "../../utils/constants";
 
 const initialItemOption = {
   ItemOptionID: "",
@@ -119,7 +119,7 @@ const QuestionForm = () => {
 
     try {
       // Make a POST request using Axios
-      const response = await axios.post(`${API}/test/question`, formData, config);
+      const response = await axios.post(`http://localhost:8800/api/test/question`, formData, config);
   
       // Handle the response as needed
       console.log('Response:', response.data);
