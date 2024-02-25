@@ -70,15 +70,15 @@ const QuestionV2 = ({ data }) => {
         }
       } catch (error) {
         setIsOnline(false);
-        // console.log("statte online ", isOnline)
-        // console.log("Network connection broken & error:", error);
       }
     };
     const intervalId = setInterval(checkConnectivity, 5000);
     return () => {
       clearInterval(intervalId);
+      localStorage.removeItem("currentPage");
     };
   }, []);
+  // console.log("quesitonStatus[currentPage] is ", questionStatus[currentPage])
 
   const generatePageNumbersPara = () => {
     const totalLength = Math.ceil(data.length);
@@ -202,11 +202,34 @@ const QuestionV2 = ({ data }) => {
     localStorage.setItem("currentPage", pageIndex);
   };
 
+  const handleUnMarkNext = () => {
+    const questionIndex = currentPage;
+
+    const updatedStatusArray = [...questionStatus];
+
+    if (optionsUI[questionIndex] !== undefined) {
+      updatedStatusArray[questionIndex] = "answered";
+    } else {
+      updatedStatusArray[questionIndex] = "not_answered";
+    }
+    setQuestionStatus(updatedStatusArray);
+    const pageIndex = currentPage + 1;
+    setSelectedOptions([]);
+    setCurrentPage(pageIndex % totalPages);
+    window.scrollTo(0, 0);
+    localStorage.setItem("currentPage", pageIndex);
+  };
+
   const handleSaveNext = () => {
     const questionIndex = currentPage;
 
     const updatedStatusArray = [...questionStatus];
-    updatedStatusArray[questionIndex] = "answered";
+    if (optionsUI[questionIndex] !== undefined) {
+      updatedStatusArray[questionIndex] = "answered";
+    } else {
+      if (updatedStatusArray[questionIndex] === undefined)
+        updatedStatusArray[questionIndex] = "not_answered";
+    }
     setQuestionStatus(updatedStatusArray);
     const pageIndex = currentPage + 1;
     setSelectedOptions([]);
@@ -235,13 +258,37 @@ const QuestionV2 = ({ data }) => {
     localStorage.setItem("currentPage", pageIndex);
   };
 
+  const handleUnMarkNextPara = () => {
+    const itemIndex = Math.floor(currentPage / paraQuestions);
+    const questionIndex = currentPage % paraQuestions;
+
+    const updatedStatusArray = [...questionStatusPara];
+    updatedStatusArray[itemIndex] = [...questionStatusPara[itemIndex]];
+    if (optionsUIPara[itemIndex][questionIndex] !== undefined) {
+      updatedStatusArray[itemIndex][questionIndex] = "answered";
+    } else {
+      updatedStatusArray[itemIndex][questionIndex] = "not_answered";
+    }
+    setQuestionStatusPara(updatedStatusArray);
+    const pageIndex = currentPage + 1;
+    setSelectedOptions([]);
+    setCurrentPage(pageIndex % totalPages);
+    window.scrollTo(0, 0);
+    localStorage.setItem("currentPage", pageIndex);
+  };
+
   const handleSaveNextPara = () => {
     const itemIndex = Math.floor(currentPage / paraQuestions);
     const questionIndex = currentPage % paraQuestions;
 
     const updatedStatusArray = [...questionStatusPara];
     updatedStatusArray[itemIndex] = [...questionStatusPara[itemIndex]];
-    updatedStatusArray[itemIndex][questionIndex] = "answered";
+    if (optionsUIPara[itemIndex][questionIndex] !== undefined) {
+      updatedStatusArray[itemIndex][questionIndex] = "answered";
+    } else {
+      if (updatedStatusArray[itemIndex][questionIndex] === undefined)
+        updatedStatusArray[itemIndex][questionIndex] = "not_answered";
+    }
     setQuestionStatusPara(updatedStatusArray);
     const pageIndex = currentPage + 1;
     setSelectedOptions([]);
@@ -265,11 +312,10 @@ const QuestionV2 = ({ data }) => {
       answered: 0,
       not_answered: 0,
     };
-    if (data?.paragraph) {
+    if (data[0]?.paragraph) {
       for (let i = 0; i < questionStatusPara.length; i++) {
         for (let j = 0; j < questionStatusPara[i].length; j++) {
           const status = questionStatusPara[i][j];
-
           switch (status) {
             case "not_visited":
               new_count.not_visited++;
@@ -317,10 +363,10 @@ const QuestionV2 = ({ data }) => {
       }
     }
     return new_count;
-  }, [questionStatusPara, questionStatus, data?.paragraph]);
+  }, [questionStatusPara, questionStatus, data[0]?.paragraph]);
 
   useEffect(() => {
-    if (data?.paragraph) {
+    if (data[0]?.paragraph) {
       const itemIndex = Math.floor(currentPage / paraQuestions);
       const questionIndex = currentPage % paraQuestions;
       const updatedCounts = countStatusOccurrences();
@@ -346,7 +392,7 @@ const QuestionV2 = ({ data }) => {
   }, [
     currentPage,
     countStatusOccurrences,
-    data?.paragraph,
+    data[0]?.paragraph,
     paraQuestions,
     questionStatus,
     questionStatusPara,
@@ -508,33 +554,48 @@ const QuestionV2 = ({ data }) => {
               <div className="button-container">
                 <div className="d-flex justify-content-between align-items-center mx-2">
                   <div className="d-flex align-center gap-3 p-2">
-                    <button
-                      className="test-button"
-                      onClick={handleReviewNextPara}
-                    >
-                      Mark for review & next
-                    </button>
-                    {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                    {questionStatusPara[
+                      Math.floor(currentPage / paraQuestions)
+                    ][currentPage % paraQuestions] === "review_answered" ||
+                    questionStatusPara[Math.floor(currentPage / paraQuestions)][
                       currentPage % paraQuestions
-                    ] !== undefined ? (
+                    ] === "review" ? (
                       <button
                         className="test-button"
-                        onClick={handleClearResponsePara}
+                        onClick={handleUnMarkNextPara}
                       >
-                        Clear Response
+                        Unmark and Next
                       </button>
-                    ) : null}
-                  </div>
-                  {optionsUIPara[Math.floor(currentPage / paraQuestions)][
-                    currentPage % paraQuestions
-                  ] !== undefined ? (
+                    ) : (
+                      <button
+                        className="test-button"
+                        onClick={handleReviewNextPara}
+                      >
+                        Mark for review & next
+                      </button>
+                    )}
+
+                    {/* {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                      currentPage % paraQuestions
+                    ] !== undefined ? ( */}
                     <button
-                      className="next-button test-button"
-                      onClick={handleSaveNextPara}
+                      className="test-button"
+                      onClick={handleClearResponsePara}
                     >
-                      Save & Next
+                      Clear Response
                     </button>
-                  ) : null}
+                    {/* ) : null} */}
+                  </div>
+                  {/* {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                    currentPage % paraQuestions
+                  ] !== undefined ? ( */}
+                  <button
+                    className="next-button test-button"
+                    onClick={handleSaveNextPara}
+                  >
+                    Save & Next
+                  </button>
+                  {/* ) : null} */}
                 </div>
               </div>
             </div>
@@ -678,33 +739,41 @@ const QuestionV2 = ({ data }) => {
             <div className="button-container">
               <div className="d-flex justify-content-between align-items-center mx-2">
                 <div className="d-flex align-center gap-3 p-2">
-                  <button className="test-button" onClick={handleReviewNext}>
-                    Mark for review & next
-                  </button>
-                  {optionsUI[currentPage] !== undefined ? (
-                    <>
-                      <button
-                        className="test-button d-none d-md-block"
-                        onClick={handleClearResponse}
-                      >
-                        Clear Response
-                      </button>
-                      <div className="text-center  d-md-none d-block">
-                        <span className="sp-link" role="presentation">
-                          ↻ Clear Response
-                        </span>
-                      </div>
-                    </>
-                  ) : null}
+                  {questionStatus[currentPage] === "review_answered" ||
+                  questionStatus[currentPage] === "review" ? (
+                    <button className="test-button" onClick={handleReviewNext}>
+                      Unmark and Next
+                    </button>
+                  ) : (
+                    <button className="test-button" onClick={handleUnMarkNext}>
+                      Mark for review & next
+                    </button>
+                  )}
+
+                  {/* {optionsUI[currentPage] !== undefined ? ( */}
+                  <>
+                    <button
+                      className="test-button d-none d-md-block"
+                      onClick={handleClearResponse}
+                    >
+                      Clear Response
+                    </button>
+                    <div className="text-center  d-md-none d-block">
+                      <span className="sp-link" role="presentation">
+                        ↻ Clear Response
+                      </span>
+                    </div>
+                  </>
+                  {/*  ) : null} */}
                 </div>
-                {optionsUI[currentPage] !== undefined ? (
-                  <button
-                    className="next-button test-button"
-                    onClick={handleSaveNext}
-                  >
-                    Save & Next
-                  </button>
-                ) : null}
+                {/* {optionsUI[currentPage] !== undefined ? ( */}
+                <button
+                  className="next-button test-button"
+                  onClick={handleSaveNext}
+                >
+                  Save & Next
+                </button>
+                {/* ) : null} */}
               </div>
 
               <div class={`offline ${isOnline ? "d-none" : "d-block"}`}>
