@@ -9,6 +9,7 @@ const Instruction = () => {
   const [ready, setReady] = useState(false);
   const candidateName = JSON.parse(localStorage.getItem("user"));
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [begin, setBegin] = useState(false);
   return (
     <>
       {isButtonClicked === false ? (
@@ -125,7 +126,11 @@ const Instruction = () => {
                     </div>
                     <div class="ct-inst-footer">
                       <div class="ct-inst-agree">
-                        <input type="checkbox" id="ct-inst" />
+                        <input
+                          type="checkbox"
+                          id="ct-inst"
+                          onChange={(e) => setBegin(e.target.checked)}
+                        />
                         <label for="ct-inst">
                           I have read and understood all the above instructions.
                           I have also read and understood clearly the
@@ -158,6 +163,7 @@ const Instruction = () => {
                           class="btn btn-submit-side"
                           type="button"
                           onClick={() => setIsButtonClicked(true)}
+                          disabled={!begin}
                         >
                           I am ready to begin
                         </button>

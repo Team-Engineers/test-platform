@@ -1,28 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./question.css";
 import { MathText } from "../mathJax/MathText";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const QuestionV2 = ({ data }) => {
   let totalPages = 0;
-
-  const generatePageNumbersPara = () => {
-    const totalLength = Math.ceil(data.length);
-    const pages = [];
-    let numberOfQuestions = 0;
-    for (let i = 0; i < totalLength; i++) {
-      const questionSet = data[i];
-      numberOfQuestions += questionSet.questions.length;
-    }
-    for (let i = 0; i < numberOfQuestions; i++) {
-      pages.push(i);
-    }
-
-    totalPages = numberOfQuestions;
-
-    return pages;
-  };
-
+  const [isOnline, setIsOnline] = useState(true);
+  const [showPallet, setShowPallet] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState(
     Array(data?.length).fill(undefined)
   );
@@ -64,19 +49,11 @@ const QuestionV2 = ({ data }) => {
   });
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [isMounted, setIsMounted] = useState(false);
-  const location = useLocation();
   const { topic } = useParams();
-  useEffect(() => {
-    if (isMounted) {
-      localStorage.removeItem("currentPage");
-    }
-  }, [location.pathname, isMounted]);
 
   const paraQuestions = data[0]?.paragraph ? data[0]?.questions?.length : 0;
 
   useEffect(() => {
-    setIsMounted(true);
     const storedPage = localStorage.getItem("currentPage");
     const parsedPage = parseInt(storedPage, 10);
     if (!isNaN(parsedPage) && parsedPage >= 0) {
@@ -84,10 +61,41 @@ const QuestionV2 = ({ data }) => {
     } else {
       setCurrentPage(0);
     }
+
+    const checkConnectivity = async () => {
+      try {
+        const response = await axios.head(`https://cuet-alpha.vercel.app/`);
+        if (response.status === 200) {
+          setIsOnline(true);
+        }
+      } catch (error) {
+        setIsOnline(false);
+        // console.log("statte online ", isOnline)
+        // console.log("Network connection broken & error:", error);
+      }
+    };
+    const intervalId = setInterval(checkConnectivity, 5000);
     return () => {
-      setIsMounted(false);
+      clearInterval(intervalId);
     };
   }, []);
+
+  const generatePageNumbersPara = () => {
+    const totalLength = Math.ceil(data.length);
+    const pages = [];
+    let numberOfQuestions = 0;
+    for (let i = 0; i < totalLength; i++) {
+      const questionSet = data[i];
+      numberOfQuestions += questionSet.questions.length;
+    }
+    for (let i = 0; i < numberOfQuestions; i++) {
+      pages.push(i);
+    }
+
+    totalPages = numberOfQuestions;
+
+    return pages;
+  };
 
   const handleOptionSelect = (questionIndex, optionIndex) => {
     const updatedSelectedOptions = [...selectedOptions];
@@ -335,18 +343,25 @@ const QuestionV2 = ({ data }) => {
         setQuestionStatus(updatedStatusArray);
       }
     }
-  }, [currentPage, countStatusOccurrences, data?.paragraph, paraQuestions, questionStatus, questionStatusPara]);
+  }, [
+    currentPage,
+    countStatusOccurrences,
+    data?.paragraph,
+    paraQuestions,
+    questionStatus,
+    questionStatusPara,
+  ]);
 
   return (
     <section className="question-practice-v2">
-      <div className="w-100 d-flex justify-content-center align-items-center flex-column">
-        {data.paragraph || data[0].paragraph ? (
-          data.paragraph ? (
-            data
-          ) : (
-            <div className="row w-100">
-              <div className="col-md-10">
-                <div className="question-box paragraph">
+      {data.paragraph || data[0].paragraph ? (
+        data.paragraph ? (
+          data
+        ) : (
+          <div className=" w-100 d-flex">
+            <div className={`testknock-left ${showPallet ? "" : "w-100"}`}>
+              <div className="border-wrapper">
+                <div className="question-box paragraph overflow-y-scroll ms-2">
                   <div className="question-number-container">
                     <span
                       className={`question-number id-${
@@ -445,7 +460,7 @@ const QuestionV2 = ({ data }) => {
                                   }
                                   className={`option-box`}
                                 >
-                                  <div class="optionitem">
+                                  <div className="optionitem">
                                     <input
                                       type="radio"
                                       name={`question-${Math.floor(
@@ -487,246 +502,276 @@ const QuestionV2 = ({ data }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="button-container">
-                    <div className="d-flex justify-content-between align-items-center mx-2">
-                      <div className="d-flex align-center gap-3 p-2">
-                        <button
-                          className="test-button"
-                          onClick={handleReviewNextPara}
-                        >
-                          Mark for review & next
-                        </button>
-                        {optionsUIPara[Math.floor(currentPage / paraQuestions)][
-                          currentPage % paraQuestions
-                        ] !== undefined ? (
-                          <button
-                            className="test-button"
-                            onClick={handleClearResponsePara}
-                          >
-                            Clear Response
-                          </button>
-                        ) : null}
-                      </div>
-                      {optionsUIPara[Math.floor(currentPage / paraQuestions)][
-                        currentPage % paraQuestions
-                      ] !== undefined ? (
-                        <button
-                          className="next-button test-button"
-                          onClick={handleSaveNextPara}
-                        >
-                          Save & Next
-                        </button>
-                      ) : null}
-                    </div>
-                  </div>
                 </div>
               </div>
-              <div className="col-md-2 ">
-                <div class="LeftBlock ">
-                  <button class="toggle-side-bar-btn" type="button">
-                    &gt;
-                  </button>
-                  <div class="question-pallet">
-                    <div class="Legend">
-                      <div class="legend-block">
-                        <div class="legend-item lg-answered">
-                          <span>{counts.answered}</span> Answered
-                        </div>
-                        <div class="legend-item lg-not_answered">
-                          <span>{counts.not_answered}</span> Not Answered
-                        </div>
-                        <div class="legend-item lg-not_visited">
-                          <span>{counts.not_visited}</span> Not Visited
-                        </div>
-                        <div class="legend-item lg-review">
-                          <span>{counts.review}</span> Marked for Review
-                        </div>
-                        <div class="legend-item lg-review_answered">
-                          <span>{counts.review_answered}</span> Answered &amp;
-                          Marked for Review (will be considered for evaluation)
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pallet-section-title">
-                      <div class="qp-title">{topic.split("_").join(" ")}</div>
-                      <div class="qp-label">Choose a Question</div>
-                    </div>
-                    <div class="pallet-list-body">
-                      <div role="presentation" class="pallet-item">
-                        {generatePageNumbersPara().map((pageIndex) => (
-                          <span
-                            id={pageIndex}
-                            key={pageIndex}
-                            className={` ${
-                              questionStatusPara[
-                                Math.floor(pageIndex / paraQuestions)
-                              ][pageIndex % paraQuestions]
-                            }`}
-                            onClick={() => handlePageChange(pageIndex)}
-                          >
-                            {pageIndex + 1}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+
+              <div className="button-container">
+                <div className="d-flex justify-content-between align-items-center mx-2">
+                  <div className="d-flex align-center gap-3 p-2">
+                    <button
+                      className="test-button"
+                      onClick={handleReviewNextPara}
+                    >
+                      Mark for review & next
+                    </button>
+                    {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                      currentPage % paraQuestions
+                    ] !== undefined ? (
+                      <button
+                        className="test-button"
+                        onClick={handleClearResponsePara}
+                      >
+                        Clear Response
+                      </button>
+                    ) : null}
                   </div>
+                  {optionsUIPara[Math.floor(currentPage / paraQuestions)][
+                    currentPage % paraQuestions
+                  ] !== undefined ? (
+                    <button
+                      className="next-button test-button"
+                      onClick={handleSaveNextPara}
+                    >
+                      Save & Next
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
-          )
-        ) : (
-          <div className="options-container">
-            <div className="row w-100">
-              <div className="col-md-10">
-                {
-                  <div className="question-box">
-                    <div className="question-number-container">
-                      <span
-                        className={`question-number id-${data[currentPage]._id}`}
-                      >
-                        Question No.
-                        {`${1 + currentPage} `}
-                      </span>
-                    </div>
-                    <div className="question-option">
-                      <div className="question">
-                        <div className="question-text-container">
-                          {data[currentPage].text.map((text, textIndex) => (
-                            <MathText
-                              className="question-text mb-2"
-                              key={textIndex}
-                              text={text}
-                              textTag="h6"
-                            />
-                          ))}
-                        </div>
+            <div
+              className="testknock-right position-relative"
+              style={{ width: `${showPallet ? "" : "0%"}` }}
+            >
+              <div className="LeftBlock ">
+                <button
+                  className={`toggle-side-bar-btn`}
+                  type="button"
+                  onClick={() => setShowPallet(!showPallet)}
+                >
+                  &gt;
+                </button>
+                <div
+                  className={`question-pallet  ${
+                    showPallet ? "d-block" : "d-none"
+                  }`}
+                >
+                  <div className="Legend">
+                    <div className="legend-block">
+                      <div className="legend-item lg-answered">
+                        <span>{counts.answered}</span> Answered
                       </div>
-                      <div className="d-flex justify-content-center align-items-center gap-3 mt-3 mb-3">
-                        {data[currentPage].images &&
-                          data[currentPage].images.map((image, imageIndex) => (
-                            <img
-                              className="question-image"
-                              key={imageIndex}
-                              src={image}
-                              alt={`Img ${imageIndex + 1}`}
-                            />
-                          ))}
+                      <div className="legend-item lg-not_answered">
+                        <span>{counts.not_answered}</span> Not Answered
                       </div>
-                      {data[currentPage].options.map((option, optionIndex) => (
-                        <div
-                          key={optionIndex}
-                          className="option-box"
-                          onClick={() =>
-                            handleOptionSelect(currentPage, optionIndex)
-                          }
-                        >
-                          <div class="optionitem">
-                            <input
-                              type="radio"
-                              name={`option-${currentPage}`}
-                              id={optionIndex}
-                              checked={optionsUI[currentPage] === optionIndex}
-                            />
-                          </div>
-                          <label for={optionIndex} className="optionLabel">
-                            <div className="d-flex align-items-center justify-content-start gap-3 w-100 align-items-center ">
-                              <MathText text={option.text} textTag="h6" />
-                              {option.image ? (
-                                <img
-                                  className="question-image"
-                                  src={option.image}
-                                  alt={`Img ${optionIndex + 1}`}
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </label>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="button-container">
-                      <div className="d-flex justify-content-between align-items-center mx-2">
-                        <div className="d-flex align-center gap-3 p-2">
-                          <button
-                            className="test-button"
-                            onClick={handleReviewNext}
-                          >
-                            Mark for review & next
-                          </button>
-                          {optionsUI[currentPage] !== undefined ? (
-                            <button
-                              className="test-button"
-                              onClick={handleClearResponse}
-                            >
-                              Clear Response
-                            </button>
-                          ) : null}
-                        </div>
-                        {optionsUI[currentPage] !== undefined ? (
-                          <button
-                            className="next-button test-button"
-                            onClick={handleSaveNext}
-                          >
-                            Save & Next
-                          </button>
-                        ) : null}
+                      <div className="legend-item lg-not_visited">
+                        <span>{counts.not_visited}</span> Not Visited
+                      </div>
+                      <div className="legend-item lg-review">
+                        <span>{counts.review}</span> Marked for Review
+                      </div>
+                      <div className="legend-item lg-review_answered">
+                        <span>{counts.review_answered}</span> Answered &amp;
+                        Marked for Review (will be considered for evaluation)
                       </div>
                     </div>
                   </div>
-                }
-              </div>
-              <div className="col-md-2 ">
-                <div class="LeftBlock ">
-                  <button class="toggle-side-bar-btn" type="button">
-                    &gt;
-                  </button>
-                  <div class="question-pallet">
-                    <div class="Legend">
-                      <div class="legend-block">
-                        <div class="legend-item lg-answered">
-                          <span>{counts.answered}</span> Answered
-                        </div>
-                        <div class="legend-item lg-not_answered">
-                          <span>{counts.not_answered}</span> Not Answered
-                        </div>
-                        <div class="legend-item lg-not_visited">
-                          <span>{counts.not_visited}</span> Not Visited
-                        </div>
-                        <div class="legend-item lg-review">
-                          <span>{counts.review}</span> Marked for Review
-                        </div>
-                        <div class="legend-item lg-review_answered">
-                          <span>{counts.review_answered}</span> Answered &amp;
-                          Marked for Review (will be considered for evaluation)
-                        </div>
-                      </div>
-                    </div>
-                    <div class="pallet-section-title">
-                      <div class="qp-title">{topic.split("_").join(" ")}</div>
-                      <div class="qp-label">Choose a Question</div>
-                    </div>
-                    <div class="pallet-list-body">
-                      <div role="presentation" class="pallet-item">
-                        {generatePageNumbers().map((pageIndex) => (
-                          <span
-                            id={pageIndex}
-                            key={pageIndex}
-                            className={` ${questionStatus[pageIndex]}`}
-                            onClick={() => handlePageChange(pageIndex)}
-                          >
-                            {pageIndex + 1}
-                          </span>
-                        ))}
-                      </div>
+                  <div className="pallet-section-title">
+                    <div className="qp-title">{topic.split("_").join(" ")}</div>
+                    <div className="qp-label">Choose a Question</div>
+                  </div>
+                  <div className="pallet-list-body">
+                    <div role="presentation" className="pallet-item">
+                      {generatePageNumbersPara().map((pageIndex) => (
+                        <span
+                          id={pageIndex}
+                          key={pageIndex}
+                          className={` ${
+                            questionStatusPara[
+                              Math.floor(pageIndex / paraQuestions)
+                            ][pageIndex % paraQuestions]
+                          }`}
+                          onClick={() => handlePageChange(pageIndex)}
+                        >
+                          {pageIndex + 1}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        )
+      ) : (
+        <div className="w-100 d-flex">
+          <div className={`testknock-left ${showPallet ? "" : "w-100"}`}>
+            <div className="border-wrapper">
+              <div className="question-box overflow-y-scroll ms-2">
+                <div className="question-number-container">
+                  <span
+                    className={`question-number id-${data[currentPage]._id}`}
+                  >
+                    Question No.
+                    {`${1 + currentPage} `}
+                  </span>
+                </div>
+                <div className="question-option">
+                  <div className="question">
+                    <div className="question-text-container">
+                      {data[currentPage].text.map((text, textIndex) => (
+                        <MathText
+                          className="question-text mb-2"
+                          key={textIndex}
+                          text={text}
+                          textTag="h6"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="d-flex justify-content-center align-items-center gap-3 mt-3 mb-3">
+                    {data[currentPage].images &&
+                      data[currentPage].images.map((image, imageIndex) => (
+                        <img
+                          className="question-image"
+                          key={imageIndex}
+                          src={image}
+                          alt={`Img ${imageIndex + 1}`}
+                        />
+                      ))}
+                  </div>
+                  {data[currentPage].options.map((option, optionIndex) => (
+                    <div
+                      key={optionIndex}
+                      className="option-box"
+                      onClick={() =>
+                        handleOptionSelect(currentPage, optionIndex)
+                      }
+                    >
+                      <div className="optionitem">
+                        <input
+                          type="radio"
+                          name={`option-${currentPage}`}
+                          id={optionIndex}
+                          checked={optionsUI[currentPage] === optionIndex}
+                        />
+                      </div>
+                      <label for={optionIndex} className="optionLabel">
+                        <div className="d-flex align-items-center justify-content-start gap-3 w-100 align-items-center ">
+                          <MathText text={option.text} textTag="h6" />
+                          {option.image ? (
+                            <img
+                              className="question-image"
+                              src={option.image}
+                              alt={`Img ${optionIndex + 1}`}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="button-container">
+              <div className="d-flex justify-content-between align-items-center mx-2">
+                <div className="d-flex align-center gap-3 p-2">
+                  <button className="test-button" onClick={handleReviewNext}>
+                    Mark for review & next
+                  </button>
+                  {optionsUI[currentPage] !== undefined ? (
+                    <>
+                      <button
+                        className="test-button d-none d-md-block"
+                        onClick={handleClearResponse}
+                      >
+                        Clear Response
+                      </button>
+                      <div className="text-center  d-md-none d-block">
+                        <span className="sp-link" role="presentation">
+                          ↻ Clear Response
+                        </span>
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+                {optionsUI[currentPage] !== undefined ? (
+                  <button
+                    className="next-button test-button"
+                    onClick={handleSaveNext}
+                  >
+                    Save & Next
+                  </button>
+                ) : null}
+              </div>
+
+              <div class={`offline ${isOnline ? "d-none" : "d-block"}`}>
+                <span>You are offline right now. Check your connection.</span>
+              </div>
+            </div>
+          </div>
+          <div
+            className="testknock-right position-relative "
+            style={{ width: `${showPallet ? "" : "0%"}` }}
+          >
+            <div className="LeftBlock">
+              <button
+                className={`toggle-side-bar-btn`}
+                type="button"
+                onClick={() => setShowPallet(!showPallet)}
+              >
+                &gt;
+              </button>
+              <div
+                className={`question-pallet  ${
+                  showPallet ? "d-block" : "d-none"
+                }`}
+              >
+                <div className="Legend">
+                  <div className="legend-block">
+                    <div className="legend-item lg-answered">
+                      <span>{counts.answered}</span> Answered
+                    </div>
+                    <div className="legend-item lg-not_answered">
+                      <span>{counts.not_answered}</span> Not Answered
+                    </div>
+                    <div className="legend-item lg-not_visited">
+                      <span>{counts.not_visited}</span> Not Visited
+                    </div>
+                    <div className="legend-item lg-review">
+                      <span>{counts.review}</span> Marked for Review
+                    </div>
+                    <div className="legend-item lg-review_answered">
+                      <span>{counts.review_answered}</span> Answered &amp;
+                      Marked for Review (will be considered for evaluation)
+                    </div>
+                  </div>
+                </div>
+                <div className="pallet-section-title">
+                  <div className="qp-title">{topic.split("_").join(" ")}</div>
+                  <div className="qp-label">Choose a Question</div>
+                </div>
+                <div className="pallet-list-body">
+                  <div role="presentation" className="pallet-item">
+                    {generatePageNumbers().map((pageIndex) => (
+                      <span
+                        id={pageIndex}
+                        key={pageIndex}
+                        className={` ${questionStatus[pageIndex]}`}
+                        onClick={() => handlePageChange(pageIndex)}
+                      >
+                        {pageIndex + 1}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

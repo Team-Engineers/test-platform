@@ -11,7 +11,9 @@ import NoData from "../Loader/NoData";
 const PracticeQuestions = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // const [calcMinimize, setCalcMinimize] = useState(false);
   const { topic, subTopic } = useParams();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     setIsLoading(true);
@@ -79,21 +81,43 @@ const PracticeQuestions = () => {
   return (
     <section className="question-practice">
       {data.length > 0 ? (
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-10">
-              <div className="text-center test-title" style = {{paddingRight:"1.8rem"}}>
+        <section className="testknock-mock-test">
+          <div className="d-flex justify-content-center align-items-center">
+            <div className="testknock-left">
+              <div className="text-center test-title">
                 TESTKNOCK TEST PLATFORM
               </div>
             </div>
-            <div className="col-lg-10" style = {{paddingRight:"1.8rem"}}> 
-              <RecommendedSubTopics />
-            </div>
-            <div className="col-lg-12">
-              <QuestionV2 data={data} />
+            <div className="ps-2 testknock-right">
+              <div className=" d-flex justify-content-center align-items-center gap-3">
+                <div className="text-nowrap">Question Paper</div>
+                <div>Instructions</div>
+              </div>
             </div>
           </div>
-        </div>
+          <div className="d-flex">
+            <div className="testknock-left pe-0">
+              <RecommendedSubTopics />
+            </div>
+            <div className="ps-0 testknock-right">
+              <div className="ct-right">
+                <div className="ct-profile-image">
+                  <img
+                    src="https://kananprep-assets.s3.ap-south-1.amazonaws.com/testengine/testengine-items/catlayout/NewCandidateImage.jpg"
+                    alt="profile"
+                  />
+                </div>
+                <div className="ct-profile-details">
+                  <div className="ct-username">{user.name}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-100">
+            <QuestionV2 data={data} />
+          </div>
+        </section>
       ) : (
         <NoData />
       )}

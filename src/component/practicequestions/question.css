@@ -12,19 +12,21 @@
 .question-practice .question-number {
   display: block;
   font-weight: 700;
-  padding-bottom: 8px;
+  padding: 5px 0;
   border-bottom: 1px solid #b1b1b1;
   margin-bottom: 12px;
   font-size: 1rem;
+  /* position: fixed; */
+  width: 100%;
 }
 
 .question-practice {
-  margin: 10px;
+  margin: 5px;
   font-size: 14px;
   color: #333;
   display: flex;
   border: 4px solid #4a7a9d;
-  height: 96.5vh;
+  height: 98.5vh;
 }
 
 .question-practice .question-text {
@@ -45,29 +47,28 @@
   overflow: auto;
 }
 
-.question-practice .button-container{
-  border : 1px solid #bababa
+.question-practice .button-container {
+  border: 1px solid #bababa;
 }
 
-.question-practice .question-option{
-  min-height: 68vh;
-  max-height: 68vh;
-}
+/* .question-practice .question-option {
+  min-height: 63.5vh;
+  max-height: 63.5vh;
+} */
 
-.question-practice .test-button{
-  color : black;
+.question-practice .test-button {
+  color: black;
   padding: 7px;
   border-radius: 5px;
   border: 1px solid #bababa;
   background-color: none;
-
 }
 
-.question-practice .question-box{
+/* .question-practice .question-box {
   padding-right: 12px;
-}
+} */
 
-.question-practice .next-button{
+.question-practice .next-button {
   background-color: #2f72b7;
   color: white;
 }
@@ -76,6 +77,10 @@
   text-align: center;
   font-size: 22px;
   font-weight: 600;
+  height: 4vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .question-practice .option-box {
@@ -252,7 +257,7 @@
 
 .question-practice .question-box .para-type .item-passage {
   min-width: 60%;
-  max-width: 60%;;
+  max-width: 60%;
   min-height: 68vh;
   max-height: 68vh;
   overflow: auto;
@@ -261,7 +266,7 @@
 }
 .question-practice .question-box .para-type .item-content {
   min-width: 40%;
-  max-width: 40%;;
+  max-width: 40%;
 }
 .toggle-button {
   transition: background-color 0.3s ease;
@@ -296,11 +301,10 @@
 }
 
 .question-practice-v2 .LeftBlock {
-  width: 18%;
-  z-index: 2;
-  position: absolute;
-  top: 9rem;
-  right: 15px;
+    z-index: 2;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
 }
 
 .question-practice-v2 .toggle-side-bar-btn {
@@ -313,12 +317,13 @@
   border: none;
   outline: 0;
   border-radius: 2px 0 0 2px;
-  margin: auto 0 auto -15px;
+  /* margin: auto 0 auto -8px; */
   color: #fff;
   padding: 0;
   font-size: 80%;
   display: block;
   cursor: pointer;
+  left : -15px
 }
 
 .question-practice-v2 .question-pallet {
@@ -405,11 +410,22 @@
 
 .question-practice-v2 .pallet-list-body {
   overflow-y: auto;
-  min-height: calc(100vh - 476px);
-  min-height: calc(var(--vh, 1vh) * 100 - 476px);
-  max-height: calc(100vh - 476px);
-  max-height: calc(var(--vh, 1vh) * 100 - 476px);
+  /* min-height: calc(100vh - 476px); */
+  min-height: calc(var(--vh, 1vh) * 100 - 532px);
+  /* max-height: calc(100vh - 476px); */
+  max-height: calc(var(--vh, 1vh) * 100 - 532px);
   padding: 0 3px;
+}
+
+.testknock-left .question-box{
+  min-height: calc(var(--vh, 1vh) * 100 - 220px);
+  max-height: calc(var(--vh, 1vh) * 100 - 220px);
+  overflow: hidden;
+}
+
+.border-wrapper{
+  border : 1px solid #bababa ;
+  /* margin-bottom: 0.5rem; */
 }
 
 .question-practice-v2 .pallet-item {
@@ -500,4 +516,204 @@
   line-height: 20px;
   padding-top: 3px;
   color: white;
+}
+
+/* calculator css */
+
+.ct-calc-normal {
+  width: 256px;
+}
+
+.ct-calc {
+  background: none repeat scroll 0 0 #dadada;
+  border-radius: 5px;
+  box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #aaa;
+  border-bottom: 7px solid #999;
+  position: fixed;
+  z-index: 99;
+}
+
+.ct-calc-head {
+  display: block;
+  width: 100%;
+  height: 36px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: #4286f3;
+  color: #fff;
+  cursor: move;
+}
+
+.ct-calc-title {
+  float: left;
+}
+
+.ct-calc-actions {
+  float: right;
+}
+
+.ct-calc-actions i {
+  margin-left: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.fa-minus:before {
+  content: "\f068";
+}
+
+.fa-times:before {
+  content: "\f00d";
+}
+
+.ct-calc-body {
+  padding: 10px 0;
+  cursor: move;
+  height: 100%;
+}
+
+.ct-calc-normal iframe {
+  height: 282px;
+  border: 0;
+  overflow: auto;
+  margin: auto;
+}
+
+.catbody .ct-calc iframe {
+  width: 100%;
+}
+
+.question-practice .ct-calc {
+  background: none repeat scroll 0 0 #dadada;
+  border-radius: 5px;
+  box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #aaa;
+  border-bottom: 7px solid #999;
+  position: fixed;
+  z-index: 99;
+}
+
+.fa-window-maximize:before {
+  content: "\f2d0";
+}
+
+.keyboard {
+  width: 145px;
+  background-color: #f4f4f4;
+  padding: 5px 20px;
+  font-size: 15px;
+  text-align: center;
+  margin-bottom: 12px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+}
+
+.keyitems {
+  text-align: center;
+}
+
+.keyitems span {
+  min-width: 24px;
+  background-color: #eee;
+  padding: 3px 8px;
+}
+
+.backspace,
+.clearall,
+.keyitems span {
+  border: 1px solid #666;
+  display: inline-block;
+  color: #000;
+  font-family: arial;
+  font-weight: 700;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.keyitems span:hover {
+  background-color: #cee9fc;
+}
+
+.offline {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.offline span {
+  background: #c50a0a;
+  color: #fff;
+  padding: 6px;
+  border-radius: 6px;
+}
+
+.ct-right {
+  width: 18%;
+  border-left: 1px solid #c3c3c1;
+  height: 112px;
+  position: relative;
+  display: flex;
+}
+
+.ct-profile-image {
+  padding: 7px;
+}
+
+.ct-profile-image img {
+  border: 1px solid #c3c3c1;
+  border-radius: 1px;
+  height: 99px;
+  width: 89px;
+}
+
+.ct-username {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 10px auto;
+}
+
+.calc-icon {
+  background: url(https://kananprep-assets.s3.ap-south-1.amazonaws.com/testengine/testengine-items/catlayout/Icon-sprite.png)
+    no-repeat -148px -62px;
+  width: 17px;
+  height: 23px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.ct-timer-block {
+  border-bottom: 1px solid #c3c3c1;
+  height: 30px;
+  line-height: 28px;
+}
+.ct-timer-left {
+  float: left;
+  margin-left: 8px;
+}
+
+.ct-timer-right {
+  float: right;
+  font-size: 1.2em;
+  margin-right: 8px;
+  font-weight: 700;
+}
+
+.ct-marks-sections {
+  height: 30px;
+  line-height: 29px;
+  text-align: right;
+  padding-right: 10px;
+  border-bottom: 1px solid #c3c3c1;
+}
+
+.testknock-left {
+  width: 82%;
+}
+
+.testknock-right {
+  width: 18%;
 }
