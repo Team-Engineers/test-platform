@@ -4,7 +4,6 @@ import { MathText } from "../mathJax/MathText";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-
 const QuestionV2 = ({ data }) => {
   let totalPages = 0;
   const [isOnline, setIsOnline] = useState(true);
@@ -364,7 +363,7 @@ const QuestionV2 = ({ data }) => {
       }
     }
     return new_count;
-  }, [questionStatusPara, questionStatus, data[0]?.paragraph]);
+  }, [questionStatusPara, data, questionStatus, data[0]?.paragraph]);
 
   useEffect(() => {
     if (data[0]?.paragraph) {
@@ -393,6 +392,7 @@ const QuestionV2 = ({ data }) => {
   }, [
     currentPage,
     countStatusOccurrences,
+    data,
     data[0]?.paragraph,
     paraQuestions,
     questionStatus,
