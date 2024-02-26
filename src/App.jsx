@@ -12,7 +12,6 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 import Nopage from "./pages/nopage/Nopage";
 import ScrollToTop from "./component/scrolltotop/ScrollToTop";
 import Admin from "./pages/admin/Admin";
-// import QuestionPush from "./component/questionPush/QuestionPush";
 import QuestionUpdate from "./component/questionUpdate/QuestionUpdate";
 import Instruction from "./component/instruction/Instruction";
 import QuestionForm from "./component/questionPush/QuestionForm";
